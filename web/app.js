@@ -81,6 +81,7 @@ function focusClause(id) {
 document.addEventListener("click", (e) => {
   const goto = e.target.closest("[data-goto]");
   if (goto) { e.preventDefault(); return focusClause(goto.dataset.goto); }
+  if (e.target.closest("details")) return; // opening details should not scroll the page
   const el = e.target.closest("mark[data-id], .card[data-id]");
   if (el) focusClause(el.dataset.id);
 });
@@ -88,6 +89,8 @@ document.addEventListener("click", (e) => {
 $("go").addEventListener("click", analyze);
 $("minlevel").addEventListener("change", () => result && render());
 $("print").addEventListener("click", () => window.print());
+// The printed report should include every card's details.
+window.addEventListener("beforeprint", () => document.querySelectorAll(".card details").forEach((d) => (d.open = true)));
 $("copy").addEventListener("click", async () => {
   try {
     await navigator.clipboard.writeText(LexReport.email(result));

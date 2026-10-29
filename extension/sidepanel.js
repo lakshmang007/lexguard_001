@@ -99,7 +99,7 @@ function focusCard(id) {
 
 document.addEventListener("click", (e) => {
   const el = e.target.closest("[data-goto], .card[data-id]");
-  if (!el || !tabId) return;
+  if (!el || !tabId || (!el.dataset.goto && e.target.closest("details"))) return;
   e.preventDefault();
   const id = Number(el.dataset.goto || el.dataset.id);
   focusCard(id);
