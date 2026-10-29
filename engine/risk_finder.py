@@ -2,7 +2,7 @@
 import re
 
 
-def _applies(rule, doc_type):
+def applies(rule, doc_type):
     types = rule.get("doc_types", ["all"])
     return doc_type == "any" or "all" in types or doc_type in types
 
@@ -20,7 +20,7 @@ def compile_rules(rules):
 
 def find_risks(clauses, rules, doc_type):
     """Attach a list of matched risks to each clause (highest weight first)."""
-    active = [r for r in rules["risks"] if _applies(r, doc_type)]
+    active = [r for r in rules["risks"] if applies(r, doc_type)]
     for clause in clauses:
         hits = []
         for rule in active:

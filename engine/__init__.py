@@ -9,7 +9,7 @@ from .defender import defend
 from .doc_type import LABELS, detect
 from .extractor import extract
 from .judge import judge
-from .risk_finder import compile_rules, find_risks
+from .risk_finder import applies, compile_rules, find_risks
 
 RULES_PATH = Path(__file__).parent / "rules" / "rules.json"
 _rules = None
@@ -52,6 +52,7 @@ def analyze(text, doc_type=None, use_ai=False):
         "text": text,
         "doc_type": detected,
         "clause_count": len(clauses),
+        "rules_checked": sum(1 for r in rules["risks"] if applies(r, detected["type"])),
         "overall": overall,
         "flags": flags,
         "ai_layer": ai_info,

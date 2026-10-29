@@ -38,6 +38,26 @@ The extension is self-contained. The four agents run inside the browser (`extens
 
 Permissions: `activeTab` reads only the tab you open LEXGUARD on. If you check a different tab later, Chrome asks once for that site. No page text leaves the browser.
 
+## How the risk score works
+
+The score is out of 100, and each step is shown in the report under **How was this score worked out?**
+
+1. Every flagged sentence gets a level (LOW, MEDIUM or HIGH) from its rule's weight. The Defender lowers that weight when it finds a protection elsewhere in the document, such as written notice or a refund window.
+2. Sentences are grouped by **kind** of risk, for example "Non-refundable payment". Each kind counts **once**, at the level of its worst sentence, so a long document that repeats the same clause 20 times is not punished for its length.
+3. Points per kind: **HIGH = 15, MEDIUM = 5, LOW = 1**. The score is the total, capped at 100.
+4. **50 or more = HIGH risk, 20–49 = MEDIUM, under 20 = LOW.**
+
+An earlier version added up every flagged sentence, so long terms (Flipkart, Razorpay, Zomato) always scored 99–100. With the per-kind score, the same real pages get: GitHub 84, Flipkart 68, Zomato 65, Razorpay 59, Netflix 56, Spotify 45.
+
+## What the report shows
+
+- **Verdict and score ring:** one plain sentence and the 0–100 score, with the breakdown one click away.
+- **What is this?** What the document is for, who it is between, how long it would take to read, and the main topics it covers in simple words (money, refunds, your account, your data, changes, disputes, and so on). Each topic is marked with its risks or "looks OK".
+- **Risks, in short** and **Ask before signing:** the main risks and the questions to ask.
+- **How LEXGUARD checked this:** what each of the four agents did on this document (sentences read, rules checked, protections found, score).
+- **Cards:** one per flagged sentence, with details folded away. Minor points are hidden behind a button.
+- **Light / dark switch:** in the top bar. It remembers your choice; otherwise it follows your system setting.
+
 ## Use it: local web app (Python)
 
 Requires Python 3.9+. `pypdf` is optional and only needed for PDF upload.

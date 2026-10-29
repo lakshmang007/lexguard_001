@@ -184,6 +184,9 @@ const LexEngine = (() => {
 
   // ---- Agent 4: Judge --------------------------------------------------------------------
   const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+  const LEVEL_POINTS = { HIGH: 15, MEDIUM: 5, LOW: 1 };
+  const SCORE_LEVELS = { HIGH: 50, MEDIUM: 20 };
+  const ORDER = { HIGH: 0, MEDIUM: 1, LOW: 2 };
 
   function judge(clauses, rules) {
     const risks = Object.fromEntries(rules.risks.map((r) => [r.id, r]));
@@ -211,9 +214,24 @@ const LexEngine = (() => {
     }
     const counts = { HIGH: 0, MEDIUM: 0, LOW: 0 };
     flags.forEach((f) => counts[f.level]++);
-    const safe = flags.reduce((s, f) => s * (1 - 0.3 * f.weight), 1);
-    const score = Math.round(100 * (1 - safe));
-    const overall = counts.HIGH >= 2 || score >= 60 ? "HIGH" : score >= 25 ? "MEDIUM" : "LOW";
+
+    // Risk score: every *kind* of risk counts once, however many sentences repeat it, so a
+    // long document is not punished for its length. Points per kind follow its worst sentence.
+    const kinds = new Map();
+    for (const f of flags) {
+      if (!kinds.has(f.rule)) kinds.set(f.rule, { rule: f.rule, name: f.risk_name, level: f.level, sentences: 0, defended: 0, first_id: f.id });
+      const k = kinds.get(f.rule);
+      k.sentences += 1;
+      k.defended += f.defended ? 1 : 0;
+      if (ORDER[f.level] < ORDER[k.level]) k.level = f.level;
+    }
+    const breakdown = [...kinds.values()].sort((a, b) => ORDER[a.level] - ORDER[b.level] || b.sentences - a.sentences);
+    breakdown.forEach((k) => (k.points = LEVEL_POINTS[k.level]));
+    const points = breakdown.reduce((s, k) => s + k.points, 0);
+    const score = Math.min(100, points);
+    const overall = score >= SCORE_LEVELS.HIGH ? "HIGH" : score >= SCORE_LEVELS.MEDIUM ? "MEDIUM" : "LOW";
+    const kindCounts = { HIGH: 0, MEDIUM: 0, LOW: 0 };
+    breakdown.forEach((k) => kindCounts[k.level]++);
     const topQuestions = [];
     const seen = new Set();
     for (const f of [...flags].sort((a, b) => b.weight - a.weight)) {
@@ -223,7 +241,11 @@ const LexEngine = (() => {
       }
       if (topQuestions.length === 3) break;
     }
-    return [flags, { score, level: overall, counts, top_questions: topQuestions }];
+    return [flags, {
+      score, level: overall, counts, top_questions: topQuestions,
+      breakdown, points, kind_counts: kindCounts, level_points: LEVEL_POINTS,
+      defended: flags.filter((f) => f.defended).length,
+    }];
   }
 
   // ---- Pipeline --------------------------------------------------------------------------
@@ -256,6 +278,7 @@ const LexEngine = (() => {
     const t1 = typeof performance !== "undefined" ? performance.now() : Date.now();
     return {
       text, doc_type: detected, clause_count: clauses.length, overall, flags,
+      rules_checked: rules.risks.filter((r) => applies(r, detected.type)).length,
       ai_layer: { used: false, note: "Runs inside your browser using the offline rule library. Nothing is uploaded." },
       elapsed_ms: round(t1 - t0, 1),
       disclaimer: "LEXGUARD is a review aid, not legal advice.",

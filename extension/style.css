@@ -27,6 +27,18 @@
     color-scheme: dark;
   }
 }
+:root[data-theme="dark"] {
+  --g-blue: #8ab4f8; --g-red: #f28b82; --g-yellow: #fdd663; --g-green: #81c995;
+  --bg: #202124; --panel: #292a2d; --ink: #e8eaed; --muted: #9aa0a6; --line: #3c4043;
+  --accent: #8ab4f8; --accent-bg: #283142; --on-accent: #202124;
+  --high: #f28b82; --high-bg: #3c2523; --high-mark: #5c2b29; --high-ring: #f28b82;
+  --med: #fdd663; --med-bg: #3b3220; --med-mark: #594a1f; --med-ring: #fdd663;
+  --low: #bdc1c6; --low-bg: #303134; --low-mark: #3c4043; --low-ring: #9aa0a6;
+  --ok: #81c995; --ok-bg: #1e3326; --ok-ring: #81c995;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, .5), 0 1px 3px 1px rgba(0, 0, 0, .3);
+  --shadow-2: 0 2px 4px rgba(0, 0, 0, .5), 0 6px 12px 4px rgba(0, 0, 0, .3);
+  color-scheme: dark;
+}
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 var(--font); -webkit-font-smoothing: antialiased; }
@@ -126,6 +138,39 @@ mark.focus, .card.focus { outline: 3px solid var(--g-blue); outline-offset: 2px;
 .card .also { color: var(--muted); font-size: 12px; margin-top: 8px; }
 footer { color: var(--muted); font-size: 13px; text-align: center; padding: 24px 16px; }
 
+/* Light / dark switch in the app bar. */
+.theme-toggle { margin-left: auto; width: 40px; height: 40px; padding: 0; display: grid; place-items: center; border-radius: 50%; color: var(--muted); }
+.offline + .theme-toggle { margin-left: 4px; }
+.theme-toggle svg { width: 20px; height: 20px; }
+.theme-toggle:hover { color: var(--accent); }
+
+/* "What is this?" overview */
+.overview .purpose { margin: 0 0 4px; font-size: 16px; }
+.overview .sub { margin: 14px 0 8px; font-weight: 500; }
+.topics { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.topics li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 12px; border-radius: 12px; background: var(--bg); }
+.topics .badge { flex: none; }
+.badge.ok { background: var(--ok-bg); color: var(--ok); }
+
+/* Score breakdown, inside the summary card */
+.how-score { margin-top: 4px; font-size: 14px; }
+.how-score summary { cursor: pointer; color: var(--accent); font-weight: 500; width: fit-content; }
+.how-score p { margin: 8px 0; }
+.breakdown { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 13px; }
+.breakdown th { text-align: left; color: var(--muted); font-weight: 500; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+.breakdown td { padding: 6px 8px; border-bottom: 1px solid var(--line); }
+.breakdown td:first-child { display: flex; gap: 8px; align-items: baseline; }
+.breakdown td:nth-child(n + 3), .breakdown th:nth-child(n + 3) { text-align: right; }
+
+/* How LEXGUARD checked this */
+.agents { margin: 0; padding: 0; list-style: none; counter-reset: agent; display: grid; gap: 8px; }
+.agents li { counter-increment: agent; display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: baseline; }
+.agents li::before { content: counter(agent); width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 13px; color: #fff; background: var(--g-blue); }
+.agents li:nth-child(2)::before { background: var(--g-red); } .agents li:nth-child(3)::before { background: var(--g-yellow); color: #202124; }
+.agents li:nth-child(4)::before { background: var(--g-green); }
+.steps .hint { margin: 10px 0 0; }
+.show-minor { margin-top: 4px; }
+
 /* Scroll-in animations (added by motion.js). */
 @keyframes unfold { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 @keyframes pop { 0% { transform: scale(.85); opacity: 0; } 60% { transform: scale(1.04); opacity: 1; } 100% { transform: scale(1); } }
@@ -144,6 +189,7 @@ footer { color: var(--muted); font-size: 13px; text-align: center; padding: 24px
   header.top .offline { margin-left: 0; }
 }
 @media print {
+  .theme-toggle, .show-minor,
   header.top .offline, .input, .toolbar, .scroll-progress { display: none !important; }
   body { background: #fff; color: #000; } .results { grid-template-columns: 1fr; } .doc { max-height: none; position: static; }
   .card, .summary, .topq, .doc { box-shadow: none; border: 1px solid #dadce0; break-inside: avoid; }

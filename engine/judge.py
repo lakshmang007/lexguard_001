@@ -1,7 +1,11 @@
 """Agent 4 - Judge: final level per clause, overall score and top questions."""
 from .defender import label
 
-LEVEL_POINTS = {"HIGH": 25, "MEDIUM": 10, "LOW": 3}
+# Risk score: every *kind* of risk counts once, however many sentences repeat it, so a
+# long document is not punished for its length. Points per kind follow its worst sentence.
+LEVEL_POINTS = {"HIGH": 15, "MEDIUM": 5, "LOW": 1}
+SCORE_LEVELS = {"HIGH": 50, "MEDIUM": 20}  # overall level from the score
+ORDER = {"HIGH": 0, "MEDIUM": 1, "LOW": 2}
 
 
 def _level(weight, thresholds):
@@ -48,11 +52,21 @@ def judge(clauses, rules):
         })
 
     counts = {lvl: sum(1 for f in flags if f["level"] == lvl) for lvl in LEVEL_POINTS}
-    safe = 1.0
+
+    kinds = {}
     for f in flags:
-        safe *= 1 - 0.3 * f["weight"]
-    score = round(100 * (1 - safe))
-    overall = "HIGH" if counts["HIGH"] >= 2 or score >= 60 else "MEDIUM" if score >= 25 else "LOW"
+        k = kinds.setdefault(f["rule"], {"rule": f["rule"], "name": f["risk_name"], "level": f["level"],
+                                         "sentences": 0, "defended": 0, "first_id": f["id"]})
+        k["sentences"] += 1
+        k["defended"] += f["defended"]
+        if ORDER[f["level"]] < ORDER[k["level"]]:
+            k["level"] = f["level"]
+    breakdown = sorted(kinds.values(), key=lambda k: (ORDER[k["level"]], -k["sentences"]))
+    for k in breakdown:
+        k["points"] = LEVEL_POINTS[k["level"]]
+    points = sum(k["points"] for k in breakdown)
+    score = min(100, points)
+    overall = "HIGH" if score >= SCORE_LEVELS["HIGH"] else "MEDIUM" if score >= SCORE_LEVELS["MEDIUM"] else "LOW"
 
     ranked = sorted(flags, key=lambda f: -f["weight"])
     top_questions, seen = [], set()
@@ -68,4 +82,9 @@ def judge(clauses, rules):
         "level": overall,
         "counts": counts,
         "top_questions": top_questions,
+        "breakdown": breakdown,
+        "points": points,
+        "kind_counts": {lvl: sum(1 for k in breakdown if k["level"] == lvl) for lvl in LEVEL_POINTS},
+        "level_points": LEVEL_POINTS,
+        "defended": sum(1 for f in flags if f["defended"]),
     }

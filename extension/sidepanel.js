@@ -12,6 +12,8 @@ async function activeTab() {
 }
 
 const readPageFn = () => ({
+  host: location.hostname,
+  title: document.title,
   selection: String(getSelection()),
   text: document.body.innerText,
   links: [...document.links]
@@ -54,6 +56,7 @@ async function run(mode, allowed = Promise.resolve(true)) {
   try {
     await LexEngine.loadRules();
     result = LexEngine.analyze(text, $("doctype").value || null);
+    result.source = { host: page.host, title: page.title };
     await chrome.scripting.insertCSS({ target: { tabId }, files: ["content.css"] });
     await chrome.scripting.executeScript({ target: { tabId }, files: ["content.js"] });
     const marked = await chrome.tabs.sendMessage(tabId, { type: "highlight", flags: result.flags });
@@ -70,8 +73,14 @@ function render(marked) {
   $("note").textContent = marked && marked.missing.length
     ? `${marked.found} of ${result.flags.length} flagged sentences are highlighted on the page. The rest are listed below.`
     : "";
-  $("cards").innerHTML = [...result.flags].sort((a, b) => order[a.level] - order[b.level] || a.id - b.id).map(LexReport.card).join("")
-    || `<p class="hint">No risky clauses found by the rule library.</p>`;
+  const sorted = [...result.flags].sort((a, b) => order[a.level] - order[b.level] || a.id - b.id);
+  const main = sorted.filter((f) => f.level !== "LOW");
+  const minor = sorted.filter((f) => f.level === "LOW");
+  // Minor points are folded away so long terms do not bury the serious ones.
+  $("cards").innerHTML = (main.map(LexReport.card).join("") || `<p class="hint">No medium or high risks found by the rule library.</p>`)
+    + (minor.length ? `<button class="show-minor" id="minor">Show ${minor.length} minor point${minor.length === 1 ? "" : "s"}</button>` : "");
+  const btn = $("minor");
+  if (btn) btn.addEventListener("click", () => btn.outerHTML = minor.map(LexReport.card).join(""));
 }
 
 function focusCard(id) {

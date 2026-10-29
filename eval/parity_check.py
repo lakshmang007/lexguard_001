@@ -34,6 +34,7 @@ def py_result(c):
     return {
         "doc_type": r["doc_type"]["type"],
         "score": r["overall"]["score"],
+        "breakdown": [[k["rule"], k["level"], k["points"], k["sentences"], k["defended"]] for k in r["overall"]["breakdown"]],
         "flags": [[f["start"], f["end"], f["rule"], f["level"], f["weight"], f["defender"], [a["rule"] for a in f["also"]]] for f in r["flags"]],
     }
 
