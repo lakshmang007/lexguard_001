@@ -1,0 +1,6 @@
+mark.lexguard { color: inherit !important; border-radius: 3px !important; padding: 1px 0 !important; cursor: pointer !important; scroll-margin: 120px; }
+mark.lexguard-high { background: rgba(226, 75, 74, 0.35) !important; box-shadow: 0 2px 0 #e24b4a !important; }
+mark.lexguard-med { background: rgba(239, 159, 39, 0.35) !important; box-shadow: 0 2px 0 #ef9f27 !important; }
+mark.lexguard-low { background: rgba(180, 178, 169, 0.35) !important; }
+@keyframes lexguard-flash { 0%, 100% { outline-color: transparent; } 30%, 70% { outline-color: #534ab7; } }
+mark.lexguard-flash { outline: 3px solid transparent; outline-offset: 2px; animation: lexguard-flash 1.4s ease 1; }

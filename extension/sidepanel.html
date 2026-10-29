@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LEXGUARD</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-size: 14px; }
+    main { padding: 12px; }
+    header.top { padding: 12px; }
+    .status { font-size: 13px; margin: 8px 0; padding: 8px 10px; border-radius: 8px; background: var(--low-bg); color: var(--muted); }
+    .status.ok { background: var(--ok-bg); color: var(--ok); }
+    .status.down { background: var(--high-bg); color: var(--high); }
+    .status code { font-size: 12px; }
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .actions select { grid-column: 1 / -1; }
+    .summary { padding: 12px; gap: 12px; }
+    .score .num { font-size: 32px; }
+    .card dl { grid-template-columns: 1fr; }
+    .links { margin-top: 12px; font-size: 13px; }
+    .links ul { padding-left: 18px; margin: 4px 0; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <h1>LEXGUARD</h1>
+    <span class="tag-line">See the risky sentence before you sign.</span>
+  </header>
+  <main>
+    <div id="status" class="status">Checking the local engine…</div>
+    <div class="actions">
+      <button id="page" class="primary">Check this page</button>
+      <button id="sel">Check selected text</button>
+      <select id="doctype" aria-label="Document type">
+        <option value="">Detect document type</option>
+        <option value="offer_letter">Offer letter</option>
+        <option value="quotation">Quotation / service agreement</option>
+        <option value="ticket">Ticket terms</option>
+        <option value="policy">Online policy / subscription</option>
+      </select>
+    </div>
+    <div id="err"></div>
+    <div id="links" class="links"></div>
+    <section id="out" hidden>
+      <div id="summary"></div>
+      <div class="toolbar">
+        <button id="copy">Copy clarification email</button>
+        <button id="clear">Clear highlights</button>
+      </div>
+      <div id="note" class="hint"></div>
+      <div id="cards" class="cards"></div>
+    </section>
+  </main>
+  <footer>Your text goes only to the LEXGUARD engine on this computer (127.0.0.1). A review aid, not legal advice.</footer>
+  <script src="report.js"></script>
+  <script src="sidepanel.js"></script>
+</body>
+</html>

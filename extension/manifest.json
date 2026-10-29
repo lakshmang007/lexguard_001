@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "LEXGUARD",
+  "version": "0.1.0",
+  "description": "See the risky sentence before you sign. Checks terms, offer letters and quotations using a local, offline engine.",
+  "permissions": ["activeTab", "scripting", "contextMenus", "sidePanel", "storage"],
+  "host_permissions": ["http://127.0.0.1:8787/*"],
+  "background": { "service_worker": "background.js" },
+  "action": { "default_title": "Open LEXGUARD" },
+  "side_panel": { "default_path": "sidepanel.html" }
+}
