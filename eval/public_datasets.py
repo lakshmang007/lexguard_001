@@ -27,7 +27,7 @@ DATA = ROOT / "datasets"
 # UNFAIR-ToS label -> LEXGUARD rules that cover it (empty = no rule yet: a known gap).
 UNFAIR_MAP = {
     "Limitation of liability": {"limitation_of_liability", "waiver_of_claims", "delay_no_liability"},
-    "Unilateral termination": {"termination_without_notice"},
+    "Unilateral termination": {"termination_without_notice", "termination_for_convenience"},
     "Unilateral change": {"unilateral_change", "price_escalation", "pay_change"},
     "Content removal": {"content_removal"},
     "Contract by using": {"contract_by_using"},
@@ -41,10 +41,10 @@ CUAD_MAP = {
     "Renewal Term": {"auto_renewal"},
     "Non-Compete": {"non_compete"},
     "Cap On Liability": {"limitation_of_liability", "waiver_of_claims"},
-    "Liquidated Damages": {"service_bond"},
-    "Covenant Not To Sue": {"waiver_of_claims"},
-    "Termination For Convenience": {"termination_without_notice", "unilateral_change"},
-    "Ip Ownership Assignment": {"ip_overreach"},
+    "Liquidated Damages": {"service_bond", "exit_fee"},
+    "Covenant Not To Sue": {"waiver_of_claims", "no_challenge"},
+    "Termination For Convenience": {"termination_without_notice", "termination_for_convenience"},
+    "Ip Ownership Assignment": {"ip_overreach", "ip_assignment"},
 }
 
 
@@ -118,13 +118,20 @@ def eval_unfair(split):
     }
 
 
-def eval_cuad():
+def cuad_rows(part):
+    """Contracts alternate between halves: even rows tune the rules, odd rows are held out."""
     csv.field_size_limit(10**8)
     reader = csv.DictReader((DATA / "cuad" / "master_clauses.csv").open(encoding="utf-8"))
+    for i, row in enumerate(reader):
+        if part == "all" or (part == "tune") == (i % 2 == 0):
+            yield row
+
+
+def eval_cuad(part="holdout"):
     per_cat = {c: {"clauses": 0, "any_flag": 0, "right_rule": 0} for c in CUAD_MAP}
     misses = defaultdict(list)
     contracts = 0
-    for row in reader:
+    for row in cuad_rows(part):
         contracts += 1
         for cat, expected in CUAD_MAP.items():
             try:
@@ -149,6 +156,7 @@ def eval_cuad():
     right = sum(s["right_rule"] for s in per_cat.values())
     return {
         "dataset": "CUAD v1 (master_clauses.csv)",
+        "part": part,
         "contracts": contracts,
         "clauses_tested": total,
         "recall_right_rule": round(right / max(1, total), 3),
@@ -177,7 +185,7 @@ def to_markdown(u, c):
     lines += [f"| {k} | {v['total']} | {v['recall_right_rule']:.0%} |" for k, v in u["per_label"].items()]
     lines += [
         "",
-        f"## CUAD v1 ({c['contracts']} contracts, {c['clauses_tested']} annotated clauses)",
+        f"## CUAD v1 ({c['part']} half: {c['contracts']} contracts, {c['clauses_tested']} annotated clauses)",
         "",
         "| CUAD category | Clauses | Caught by the matching rule | Flagged by any rule |", "|---|---|---|---|",
     ]
@@ -188,9 +196,11 @@ def to_markdown(u, c):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--split", default="test", choices=["train", "validation", "test"])
+    ap.add_argument("--cuad", default=None, choices=["tune", "holdout", "all"],
+                    help="CUAD half to use (default: holdout for the test split, tune otherwise)")
     args = ap.parse_args()
     u = eval_unfair(args.split)
-    c = eval_cuad()
+    c = eval_cuad(args.cuad or ("holdout" if args.split == "test" else "tune"))
     (ROOT / "eval" / "results_public.json").write_text(json.dumps({"unfair_tos": u, "cuad": c}, indent=2, ensure_ascii=False), encoding="utf-8")
     md = to_markdown(u, c)
     (ROOT / "eval" / "results_public.md").write_text(md, encoding="utf-8")

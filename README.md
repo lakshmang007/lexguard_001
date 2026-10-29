@@ -14,7 +14,7 @@ Web page  / Chrome extension / PDF upload
          Local server (127.0.0.1:8787, offline)
                  │
   1. Extractor   → numbered clauses with exact character positions
-  2. Risk Finder → 28 risk rules (incl. India rule pack) from engine/rules/rules.json
+  2. Risk Finder → 32 risk rules (incl. India rule pack) from engine/rules/rules.json
   3. Defender    → searches the whole document for protections, lowers the risk
   4. Judge       → LOW / MEDIUM / HIGH, overall score, top-3 questions
                  │
@@ -65,18 +65,33 @@ These samples were written by the same team that wrote the rules, so they are a 
 
 ### Results on public data: LexGLUE UNFAIR-ToS, held-out test split (1,607 sentences)
 
-| Metric | Baseline (first rules) | After tuning on the train split |
-|---|---|---|
-| Unfair sentences flagged (recall) | 28.5% | **65.7%** |
-| Precision | 45.8% | **54.1%** |
-| Fair sentences flagged HIGH | 2.4% | **3.5%** |
-| Speed | | 0.5 ms per sentence |
+| Metric | First rules | Round 1 tuning | Round 2 tuning (current) |
+|---|---|---|---|
+| Unfair sentences flagged (recall) | 28.5% | 65.7% | **74.4%** |
+| Precision | 45.8% | 54.1% | **54.2%** |
+| Fair sentences flagged HIGH | 2.4% | 3.5% | **3.6%** |
+| Speed | | | 0.7 ms per sentence |
+
+Recall by type in round 2: Arbitration 86%, Choice of law 85%, Content removal 85%, Limitation of liability 82%, Contract by using 70%, Jurisdiction 69%, Unilateral termination 66%, Unilateral change 60%. Rules were tuned only on the train split and checked on validation.
 
 UNFAIR-ToS marks some clauses as "fair" that LEXGUARD flags on purpose, such as non-refundable payments, auto-renewal and indemnity, so precision understates usefulness for consumers. Full tables are in [`eval/results_public.md`](eval/results_public.md); the baseline is in `eval/results_public_baseline.md`.
 
 ### Results on public data: CUAD (510 commercial contracts)
 
-Recall is low on business-to-business contract language: Non-Compete 7%, IP assignment 0%, Cap on Liability 28%, Liquidated Damages 53%. Our rules target consumer and employee wording. This is the main gap for the optional AI layer or more rules.
+The contracts alternate between two halves: rules were tuned on one half (255 contracts) and are reported on the other, held-out half (255 contracts, 941 annotated clauses).
+
+| CUAD category | Before (round 1 rules) | After (round 2 rules) |
+|---|---|---|
+| Cap on liability | 29% | **74%** |
+| Liquidated damages / exit fee | 51% | **70%** |
+| Renewal term | 42% | **69%** |
+| Non-compete | 10% | **51%** |
+| Covenant not to sue | 2% | **46%** |
+| Termination for convenience | 15% | **46%** |
+| IP ownership assignment | 0% | **44%** |
+| **All 7 categories** | **21%** | **60%** |
+
+CUAD has only positive examples, so false alarms are measured on the fair sentences in UNFAIR-ToS above. Round 2 added 4 rules: termination for convenience, IP assignment, early-exit fee, and promises not to challenge their rights. It also widened the auto-renewal, non-compete and liability-cap patterns.
 
 ## Project layout
 
@@ -95,7 +110,7 @@ eval/              benchmark.py, public_datasets.py, results
 - No OCR yet: scanned PDFs without a text layer are rejected with a message.
 - English only. Kannada/Hindi output is planned.
 - The extension can't read Chrome's built-in PDF viewer; use the web page upload instead.
-- Rule-based recall on real terms is about 66%, so a clean report does not mean a document is safe.
+- Rule-based recall is about 74% on real Terms of Service and 60% on business contracts, so a clean report does not mean a document is safe.
 
 ## AI disclosure
 

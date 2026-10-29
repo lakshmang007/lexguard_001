@@ -6,11 +6,11 @@
     "unfair_sentences": 172,
     "fair_sentences": 1435,
     "binary": {
-      "precision": 0.541,
-      "recall": 0.657,
-      "f1": 0.593,
-      "fair_flagged_any": 0.067,
-      "fair_flagged_high": 0.035
+      "precision": 0.542,
+      "recall": 0.744,
+      "f1": 0.627,
+      "fair_flagged_any": 0.075,
+      "fair_flagged_high": 0.036
     },
     "per_label": {
       "Arbitration": {
@@ -27,15 +27,15 @@
       },
       "Content removal": {
         "total": 13,
-        "any_flag": 9,
-        "right_rule": 8,
-        "recall_right_rule": 0.615
+        "any_flag": 11,
+        "right_rule": 11,
+        "recall_right_rule": 0.846
       },
       "Contract by using": {
         "total": 23,
-        "any_flag": 12,
-        "right_rule": 12,
-        "recall_right_rule": 0.522
+        "any_flag": 16,
+        "right_rule": 16,
+        "recall_right_rule": 0.696
       },
       "Jurisdiction": {
         "total": 16,
@@ -45,21 +45,21 @@
       },
       "Limitation of liability": {
         "total": 38,
-        "any_flag": 27,
-        "right_rule": 26,
-        "recall_right_rule": 0.684
+        "any_flag": 32,
+        "right_rule": 31,
+        "recall_right_rule": 0.816
       },
       "Unilateral change": {
         "total": 38,
-        "any_flag": 24,
+        "any_flag": 25,
         "right_rule": 23,
         "recall_right_rule": 0.605
       },
       "Unilateral termination": {
         "total": 38,
-        "any_flag": 22,
-        "right_rule": 16,
-        "recall_right_rule": 0.421
+        "any_flag": 27,
+        "right_rule": 25,
+        "recall_right_rule": 0.658
       }
     },
     "top_false_positive_rules": [
@@ -69,11 +69,11 @@
       ],
       [
         "limitation_of_liability",
-        15
+        20
       ],
       [
         "termination_without_notice",
-        11
+        12
       ],
       [
         "waiver_of_claims",
@@ -81,28 +81,28 @@
       ],
       [
         "auto_renewal",
-        8
+        9
+      ],
+      [
+        "content_removal",
+        7
+      ],
+      [
+        "contract_by_using",
+        6
       ],
       [
         "one_sided_indemnity",
         6
-      ],
-      [
-        "content_removal",
-        6
-      ],
-      [
-        "mandatory_arbitration",
-        5
       ]
     ],
     "sample_misses": {
       "Contract by using": [
-        "you acknowledge and agree that , by accessing or using the site or services or by downloading or posting any content from or on the site or through the services , you are indicating that you have read",
         "by continuing to access or use the site or services after we have posted a modification on the site or have provided you with notice of a modification , you are indicating that you agree to be bound b",
         "by continuing to access or use the services after those revisions become effective , you agree to be bound by the revised terms .",
         "when you use our services you agree to all of these terms .",
-        "you agree that by clicking `` join now '' , `` join linkedin '' , `` sign up '' or similar , registering , accessing or using our services ( described below ) , you are agreeing to enter into a legall"
+        "any revisions to these terms and conditions will become effective the earlier of ( i ) the end of such 7-day period or ( ii ) the first time you access or use the service after such changes .",
+        "if you do register for or otherwise use our service you shall be deemed to confirm your acceptance of the terms and your agreement to be a party to this binding contract ."
       ],
       "Unilateral change": [
         "if we believe , in our sole discretion , that any member of academia.edu or academia premium or other academia.edu paid services is in breach of our terms , or act outside of the letter or spirit of o",
@@ -112,25 +112,22 @@
         "we may take any of these actions at any time , and when we do , we will try to notify you beforehand , but this wo n't always be possible ."
       ],
       "Unilateral termination": [
-        "academia.edu reserves the right , at any time and without prior notice , to remove or disable access to any collective content , including , but not limited to , collective content that academia.edu ,",
         "it is academia.edu 's policy to terminate , in appropriate circumstances , members or other account holders who repeatedly infringe or are believed to be repeatedly infringing the rights of copyright ",
         "academia.edu reserves the right to revoke your access to and use of the site , services and collective content at any time , with or without cause .",
         "the licenses granted by amazon terminate if you do not comply with these conditions of use or any service terms .",
-        "we reserve the right to revoke the free trial and put your account on hold in the event that we determine that you are not eligible ."
-      ],
-      "Limitation of liability": [
-        "neither academia.edu nor any other person or entity involved in creating , producing , or delivering the site , services or collective content will be liable for any incidental , special , exemplary o",
-        "in no event will academia.edu 's aggregate liability arising out of or in connection with these terms or from the use of or inability to use the site , services or collective content exceed the greate",
-        "in no event will snap group limited , snap inc. , or their affiliates ' aggregate liability for all claims relating to the services exceed the greater of # 100 gbp or the amount you paid snap group li",
-        "the limitations of this subsection shall apply to any theory of liability , whether based on warranty , contract , statute , tort ( including negligence ) or otherwise , and whether or not the twitter",
-        "to the extent allowed under law , linkedin and its affiliates ( and those that linkedin works with to provide the services ) ( a ) disclaim all implied warranties and representations ( e.g. warranties"
+        "we reserve the right to revoke the free trial and put your account on hold in the event that we determine that you are not eligible .",
+        "your content in memories might become unavailable for any number of reasons , including things like an operational glitch or a decision on our end to terminate your account ."
       ],
       "Content removal": [
-        "amazon reserves the right to refuse service , terminate accounts , terminate your rights to use amazon services , remove or edit content , or cancel orders in its sole discretion .",
         "your content in memories might become unavailable for any number of reasons , including things like an operational glitch or a decision on our end to terminate your account .",
-        "we are not obligated to publish any information or content on our service and can remove it in our sole discretion , with or without notice .",
-        "uber may , but shall not be obligated to , review , monitor , or remove user content , at uber 's sole discretion and at any time and for any reason , without notice to you .",
-        "if we believe you are abusing ebay in any way , we may , in our sole discretion and without limiting other remedies , limit , suspend , or terminate your user account ( s ) and access to our services "
+        "we are not obligated to publish any information or content on our service and can remove it in our sole discretion , with or without notice ."
+      ],
+      "Limitation of liability": [
+        "the limitations of this subsection shall apply to any theory of liability , whether based on warranty , contract , statute , tort ( including negligence ) or otherwise , and whether or not the twitter",
+        "to the extent allowed under law , linkedin and its affiliates ( and those that linkedin works with to provide the services ) ( a ) disclaim all implied warranties and representations ( e.g. warranties",
+        "in no event shall the liability of linkedin and its affiliates ( and those that linkedin works with to provide the services ) exceed , in the aggregate for all claims , an amount that is the lesser of",
+        "in no event will duolingo be responsible for the actions or inactions of any third party payment processor , including , but not limited to , system downtime or payment service outages .",
+        "in the event that duolingo suspends or terminates your use of the service or these terms and conditions or you close your account voluntarily , you understand and agree that you will receive no refund"
       ],
       "Jurisdiction": [
         "in the unlikely event we end up in a legal dispute , we agree to resolve it in california courts ( using california law ) or dublin , ireland courts ( using irish law ) .",
@@ -147,114 +144,115 @@
         "any dispute , conflict , claim or controversy arising out of or broadly in connection with or relating to the services or these terms , including those relating to its validity , its construction or i"
       ]
     },
-    "seconds": 0.86,
-    "ms_per_sentence": 0.54
+    "seconds": 1.09,
+    "ms_per_sentence": 0.68
   },
   "cuad": {
     "dataset": "CUAD v1 (master_clauses.csv)",
-    "contracts": 510,
-    "clauses_tested": 1848,
-    "recall_right_rule": 0.205,
+    "part": "holdout",
+    "contracts": 255,
+    "clauses_tested": 941,
+    "recall_right_rule": 0.597,
     "per_category": {
       "Renewal Term": {
-        "clauses": 199,
-        "any_flag": 89,
-        "right_rule": 85,
-        "recall_right_rule": 0.427,
-        "recall_any_flag": 0.447
+        "clauses": 101,
+        "any_flag": 72,
+        "right_rule": 70,
+        "recall_right_rule": 0.693,
+        "recall_any_flag": 0.713
       },
       "Non-Compete": {
-        "clauses": 226,
-        "any_flag": 22,
-        "right_rule": 16,
-        "recall_right_rule": 0.071,
-        "recall_any_flag": 0.097
+        "clauses": 124,
+        "any_flag": 65,
+        "right_rule": 63,
+        "recall_right_rule": 0.508,
+        "recall_any_flag": 0.524
       },
       "Cap On Liability": {
-        "clauses": 632,
-        "any_flag": 183,
-        "right_rule": 177,
-        "recall_right_rule": 0.28,
-        "recall_any_flag": 0.29
+        "clauses": 314,
+        "any_flag": 232,
+        "right_rule": 231,
+        "recall_right_rule": 0.736,
+        "recall_any_flag": 0.739
       },
       "Liquidated Damages": {
-        "clauses": 113,
-        "any_flag": 67,
-        "right_rule": 60,
-        "recall_right_rule": 0.531,
-        "recall_any_flag": 0.593
+        "clauses": 67,
+        "any_flag": 51,
+        "right_rule": 47,
+        "recall_right_rule": 0.701,
+        "recall_any_flag": 0.761
       },
       "Covenant Not To Sue": {
-        "clauses": 159,
-        "any_flag": 3,
-        "right_rule": 3,
-        "recall_right_rule": 0.019,
-        "recall_any_flag": 0.019
+        "clauses": 87,
+        "any_flag": 40,
+        "right_rule": 40,
+        "recall_right_rule": 0.46,
+        "recall_any_flag": 0.46
       },
       "Termination For Convenience": {
-        "clauses": 223,
-        "any_flag": 50,
-        "right_rule": 38,
-        "recall_right_rule": 0.17,
-        "recall_any_flag": 0.224
+        "clauses": 105,
+        "any_flag": 54,
+        "right_rule": 48,
+        "recall_right_rule": 0.457,
+        "recall_any_flag": 0.514
       },
       "Ip Ownership Assignment": {
-        "clauses": 296,
-        "any_flag": 4,
-        "right_rule": 0,
-        "recall_right_rule": 0.0,
-        "recall_any_flag": 0.014
+        "clauses": 143,
+        "any_flag": 66,
+        "right_rule": 63,
+        "recall_right_rule": 0.441,
+        "recall_any_flag": 0.462
       }
     },
     "sample_misses": {
-      "Cap On Liability": [
-        "The foregoing states the entire liability of Company with respect to infringement of intellectual property rights.",
-        "IN NO EVENT SHALL COMPANY BE LIABLE TO \"MA\", ITS CLIENTS, OR ANY THIRD PARTY FOR ANY TORT OR CONTRACT DAMAGES OR INDIRECT, SPECIAL, GENERAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES, INCLUDING BUT NOT LIMI",
-        "COMPANY'S SOLE AND EXCLUSIVE LIABILITY FOR THE WARRANTY PROVIDED IN SUBPARAGRAH (A) HEREOF SHALL BE TO CORRECT THE TECHNOLOGY TO OPERATE IN SUBSTANTIAL ACCORDANCE WITH ITS THEN CURRENT SPECIFICATIONS ",
-        "NEITHER PARTY SHALL BE LIABLE UNDER OR IN CONNECTION WITH THIS AGREEMENT FOR INDIRECT, INCIDENTAL, CONSEQUENTIAL, LIQUIDATED, SPECIAL OR EXEMPLARY DAMAGES OR PENALTIES, INCLUDING WITHOUT LIMITATION, L",
-        "EXCEPT FOR THE ABOVE INDEMNIFICATION OBLIGATIONS AND FOR BREACHES OF SECTION 14, NEITHER PARTY SHALL BE LIABLE TO THE OTHER FOR ANY INCIDENTAL, CONSEQUENTIAL, SPECIAL OR PUNITIVE DAMAGES ARISING OUT O"
-      ],
       "Renewal Term": [
         "At Rogers' option, this Agreement shall renew for a subsequent term of two (2) years on the terms and conditions herein (the \"Renewal Term\").",
-        "License Term Perpetual, unlimited runs x Other: 2 years Commencing: November 15, 2012",
-        "If this Agreement is renewed for the Second Additional Term, then the Second Additional Term shall commence on July 23, 2019 and the Agreement shall expire and terminate automatically without further ",
-        "In the event that MusclePharm shall achieve Net Sales (as defined below) of $20 million (the \"First Renewal Threshold\") in the aggregate during the Third Contract Year, then this Agreement shall autom",
-        "If this Agreement is renewed for the First Additional Term, then the First Additional Term shall commence on July 23, 2016, and the Agreement shall expire and terminate automatically without further n"
-      ],
-      "Termination For Convenience": [
-        "Notwithstanding any other provision of this Agreement, Rogers may terminate this Agreement, at any time, upon sixty (60) days' prior written notice to Licensor.",
-        "Accordingly, either Party may terminate this Agreement or all/part of a Project for any reason and at any time upon giving the other Party sixty (60) days prior written notice.",
-        "This Agreement may be terminated by either party for any reason or no reason, whether or not extended beyond the initial term, by giving the other party written notice ninety (90) days in advance.",
-        "The Agreement may be terminated by both Parties with a notification period of *** before the end of the Initial Term of the Agreement.",
-        "Regardless of the term, Licensee can terminate Agreement with at least one hundred eighty (180) days written notice with no further obligation."
-      ],
-      "Non-Compete": [
-        "During the Term, (a) Women.com will not buy, sell, display, distribute advertising from (including, but not limited to, banner ads, buttons, badges, text links, hyperlinks or editorial mentions) or ot",
-        "Products. Any failure of Endorser to disclose such conflicting interests, or any breach of this Section, shall be deemed a material breach of the Agreement.",
-        "Endorser's duty not to compete with the business of MusclePharm shall continue for a period of one year following the expiration or termination of this Agreement.",
-        "Endorser shall not use or provide endorsements or testimonials for products that compete with MusclePharm Products or the Licensed Products.",
-        "During the Term of this Agreement, and for a period of two (2) years thereafter, Aucta shall not research, develop, manufacture, file, sell, market, or distribute more than two products containing the"
+        "Distributor shall have the option to renew this Agreement for an additional Three (3) year period by providing prior written notice to Company within Ninety (90) days of the end of the initial period ",
+        "In the event that either Wade or Naked wishes to extend the Term of the Agreement as contemplated above, it shall provide the other Party with written notice at least ninety (90) days prior to the exp",
+        "The other Party will then have a period of fourteen (14) days from the date of the notice to indicate whether it also desires to extend the Term, on the terms and conditions set forth herein and if no",
+        "The initial term of this Agreement shall be for a period of four (4) years, commencing on the Effective Date, which term may be extended for up to three (3) years by written agreement of both Parties "
       ],
       "Covenant Not To Sue": [
-        "At no time during the term of the Agreement or thereafter shall eDiets attack, challenge or file any application with respect to any Women.com Mark.",
-        "At no time during the term of the Agreement or thereafter shall Women.com attack, challenge or file any application with respect to any eDiets Mark.",
-        "Women.com acknowledges that eDiets owns all right, title and interest in and to the eDiets Content, and Women.com shall not now or in the future contest the validity of the eDiets' ownership rights in",
-        "Integrity recognizes TL's title to the                   TL Trademarks and will not at any time do or suffer to be done                   any act or thing which will in any way impair TL's rights in  ",
-        "TL recognizes Integrity's title                   to the Integrity Trademarks and will not at any time do or                   suffer to be done any act or thing which will in any way                 "
+        "TL recognizes Integrity's title                   to the Integrity Trademarks and will not at any time do or                   suffer to be done any act or thing which will in any way                 ",
+        "Distributor shall not dispute or contest for any reason whatsoever, directly or indirectly, during the term of this Agreement and thereafter, the validity, ownership or enforceability of any of the tr",
+        "Distributor will not institute any proceedings with respect to the trademarks of Company either in Distributor's own name or on behalf of Company without express written permission of Company.",
+        "Honeywell agrees that it will not, and agrees to cause each member of the Honeywell Group not to, (i) initiate any Action against any member of the SpinCo Group or its Affiliates for infringement, mis",
+        "SpinCo agrees that it will not, and agrees to cause each member of the SpinCo Group not to, (i)<omitted>initiate any Action against any member of the Honeywell Group or its Affiliates for infringement"
       ],
       "Ip Ownership Assignment": [
-        "All such works based upon the Trademarks and/or Name and Appearance Rights shall be prepared by an employee-for- hire of MusclePharm (under MusclePharms's sole supervision, responsibility, and monetar",
-        "MusclePharm agrees that any copyrights in works created based upon the Trademarks and/or Name and Appearance Rights shall become the rights of the AS Parties (as among them to be determined among them",
-        "MusclePharm irrevocably and unconditionally transfers and assigns to the AS Parties in perpetuity and throughout the universe any and all of MusclePharm's right, title, and interest, if any (including",
-        "if such rights comprise (i) intellectual property that constitutes predominantly communication software or related communication hardware or other technology, including without limitation, any upgrade",
-        "The right, title and interest in and to the Company-Skype Branded Content shall be owned by Skype to the extent made up of the Skype Rights which have been integrated into the Company-Skype Branded Co"
+        "The right, title and interest in and to the Company-Skype Branded Content shall be owned by Skype to the extent made up of the Skype Rights which have been integrated into the Company-Skype Branded Co",
+        "Reed's will exclusively own all Deliverables.",
+        "ompany will and hereby does, without further consideration, irrevocably assign to Reed's any and all worldwide right, title or interest that Company may now or hereafter possess in or to the Deliverab",
+        "Distributor shall assign to Company, without charge, any rights in the trademarks of Company that may inure to the benefit of Distributor pursuant to this Agreement or otherwise.",
+        "Franchisee shall execute, for no additional consideration, any and all documents deemed necessary by Franchisor or its attorneys to be necessary to transfer such right, title or interest to Franchisor"
+      ],
+      "Termination For Convenience": [
+        "ETON has the right to terminate this Agreement after approval of the Dossier or marketing application for the Product (or added new product), at its sole discretion, upon providing one hundred eighty ",
+        "The Agreement may be terminated by both Parties with a notification period of *** before the end of the Initial Term of the Agreement.",
+        "Either Party may terminate the Project and all commitments and obligations with respect thereto, subject to Section 8.3 herein, upon thirty (30) days written notice to the other Party.",
+        "This Agreement may be terminated by ArTara upon thirty (30) days prior written notice to University.",
+        "Vyera shall have the right to terminate this Agreement in its entirety:<omitted>(c) at any time following the second (2nd) anniversary of the First Commercial Sale of the Licensed Product, for any rea"
+      ],
+      "Non-Compete": [
+        "Wade represents and warrants that during the Term and in  the Territory, neither Wade nor any of his agents, representatives or employees will solicit, initiate, or encourage any proposal for an endor",
+        "CytoDyn shall have the right to terminate this Agreement in its entirety upon written notice to Vyera on the occurrence of any of the following:<omitted>(c) Vyera breaches its obligations or covenants",
+        "Beginning on the Launch Date and continuing during the Term, VerticalNet shall not place advertising relating to the commercial printing entities listed on Exhibit \"A,\" or other such entities subseque",
+        "Within three      business days of receiving Application Provider's written update,      Excite@Home will remove any advertising from Application Provider's listed      competitors displayed on the Co",
+        "Within three business days of      receiving Excite@Home's written update, Application Provider will remove      any advertising from Excite@Home's listed competitors displayed on the      Co-Branded "
+      ],
+      "Cap On Liability": [
+        "Any claim for damages must be notified to the other Party within six (6) months as from the date on which the damage was caused, failing which such claim is deemed to be waived.",
+        "It is the cumulative maximum for which IBM and its Affiliates and Subcontractors are collectively responsible.",
+        "This is IBM's entire obligation to Customer with regard to any claim of infringement.",
+        "IBM will give Customer a credit equal to the amount Customer paid IBM for the applicable Materials or for use of the applicable Base Components up to a maximum of twelve (12) months of applicable char",
+        "Regardless of the basis on which Customer is entitled to claim damages from IBM (including fundamental breach, negligence, misrepresentation, or other contract or tort claim), IBM is liable for no mor"
       ],
       "Liquidated Damages": [
         "In case of violation of this article, the Party shall pay to the other Party an equivalent of eighteen (18) months gross salary of the respective employee.",
-        "COMPANY will pay JHU a fee equal one percent (1%) of the Aggregate Consideration received by the COMPANY, or the total amount received by stockholders of COMPANY, upon the occurrence of a Liquidity Ev",
-        "Solely in the event that Dova has terminated this Agreement pursuant to Section 12.3.1 and notwithstanding anything else herein, in consideration of the promotion services performed by Valeant during ",
-        "In addition, CHT may terminate this Agreement and the rights granted hereunder, in whole or in part, and without prejudice to enforcement of any other legal right or remedy (including any express term",
-        "The  Exit  Fee  shall  be  paid  by  Affiliate  immediately prior to the assignment  or  Transfer of Merchants and/or its net revenue.  The amount of the Exit Fee during and following the termination "
+        "In the event of termination of this Agreement and without limitation of Fox's rights and remedies all of which are expressly reserved, the following payment penalties shall apply: (i) if termination o",
+        "If this Agreement is terminated due to your default, you must, upon written demand, pay us a lump-sum payment in an amount calculated as follows: (a) the average of your Royalty fees and Advertising C",
+        "You specifically acknowledge that our designated representative may take over, control, and operate the Franchised Restaurant, and that you will pay us a service fee of not less than TWO HUNDRED Dolla",
+        "You pay us a nonrefundable Initial Franchise Fee of ________________ _______________________ Dollars ($________) which is payable in full on the date of this Agreement."
       ]
     }
   }

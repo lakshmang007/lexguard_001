@@ -66,7 +66,9 @@
         "\\b(suspend|terminate|deactivate)\\b[^.;]{0,30}\\b(your )?(account|access|services?|employment)\\b[^.;]{0,40}\\b(at any time|at (its|our) (sole )?discretion)",
         "\\b(we|company|reserves? the right|right to|may|will be|can)\\b[^.;]{0,60}\\b(terminat|suspend|deactivat|disabl|cancel|clos|block|restrict|limit)\\w*\\b[^.;]{0,30}\\b(your|any|the user'?s?|user)\\b[^.;]{0,20}\\b(account|access|use|membership|subscription|profile|services?)\\b",
         "\\b(result in|lead to|grounds for)\\b[^.;]{0,25}\\b(the )?(immediate )?(termination|suspension|cancellation|deactivation)\\b",
-        "\\b(account|access|membership|subscription)\\b[^.;]{0,20}\\b(will|may|can) be (terminated|suspended|cancelled|canceled|closed|deactivated)\\b"
+        "\\b(account|access|membership|subscription)\\b[^.;]{0,20}\\b(will|may|can) be (terminated|suspended|cancelled|canceled|closed|deactivated)\\b",
+        "\\b(may|reserves? the right|right to|discretion)\\b[^.;]{0,80}\\b(suspend|stop providing|discontinue|withdraw|disable|deactivate)\\w*\\b",
+        "\\bwithdrawal of your right to use\\b"
       ],
       "protections": [
         "termination_cause",
@@ -76,7 +78,8 @@
       "question": "What notice or compensation will I get if this is terminated, and for what reasons?",
       "safer_wording": "Either party may terminate this agreement with 30 days' written notice, or immediately only for material breach after a written warning.",
       "exclude_patterns": [
-        "\\byou (may|can|are free to) (terminate|cancel|close|delete|deactivate)"
+        "\\byou (may|can|are free to) (terminate|cancel|close|delete|deactivate)",
+        "\\byou (may|can) (discontinue|stop|withdraw)"
       ]
     },
     {
@@ -140,19 +143,24 @@
       "id": "non_compete",
       "name": "Non-compete after leaving",
       "doc_types": [
-        "offer_letter",
-        "quotation"
+        "all"
       ],
       "jurisdiction": "IN",
       "weight": 0.65,
       "patterns": [
         "\\bnon[- ]?compet\\w*\\b",
-        "\\bshall not\\b[^.;]{0,30}\\b(join|work for|be employed|engage|provide services)\\b[^.;]{0,60}\\b(competitor|competing|similar business|clients?)\\b"
+        "\\bshall not\\b[^.;]{0,30}\\b(join|work for|be employed|engage|provide services)\\b[^.;]{0,60}\\b(competitor|competing|similar business|clients?)\\b",
+        "^(?=.*\\b(?:not|no|neither|refrain|prohibit\\w*|restrict\\w*|exclusive\\w*)\\b).*\\b(compete|competing|(competitive|in competition) with|competitive (products?|services?|business(es)?|compan(y|ies))|competitors?|(substantially )?similar (products?|services?|business(es)?|companies))\\b",
+        "\\bcovenants?\\b[^.;]{0,60}\\bnot\\b[^.;]{0,60}\\b(engage|own|operate|manage|be employed|provide services)\\b",
+        "\\b(during|throughout) the term\\b[^.;]{0,200}\\b(shall not|will not|not to|neither)\\b[^.;]{0,100}\\b(sell|market|promote|distribute|engage|offer|develop|license|enfranchise|operate)\\b"
       ],
       "protections": [],
       "reason": "Limits where you can work next. Post-employment non-competes are generally void in India (Indian Contract Act, s.27), but can still be used to pressure you.",
       "question": "Can this restriction be limited to not using confidential information, rather than not working in the field?",
-      "safer_wording": "After leaving, the Employee will not use or disclose the Company's confidential information. No other restriction on future employment applies."
+      "safer_wording": "After leaving, the Employee will not use or disclose the Company's confidential information. No other restriction on future employment applies.",
+      "exclude_patterns": [
+        "\\bcompetitive advantage\\b"
+      ]
     },
     {
       "id": "probation_extension",
@@ -241,7 +249,12 @@
         "\\bnot (be )?(held )?(liable|responsible)\\b",
         "\\bliability\\b[^.;]{0,150}\\b(not exceed|limited to|be limited)\\b",
         "\\b(without|disclaims?|excludes?)\\b[^.;]{0,20}\\b(any |all )?(liability|responsibility)\\b",
-        "\\bno (responsibility|liability)\\b"
+        "\\bno (responsibility|liability)\\b",
+        "\\b(sole|exclusive) (and exclusive )?(remedy|remedies|recourse)\\b",
+        "\\b(liable|liability|damages)\\b[^.;]{0,150}\\b(consequential|incidental|indirect|special|punitive|exemplary|lost profits|loss of profits)\\b",
+        "\\b(maximum|aggregate|total|cumulative|entire) (aggregate )?liability\\b",
+        "\\bliability cap\\b",
+        "\\b(neither party|in no event|under no circumstances)\\b[^.;]{0,80}\\bliable\\b"
       ],
       "protections": [
         "liability_carveout",
@@ -251,7 +264,8 @@
       "question": "Is there an exception for negligence, fraud or failure to deliver?",
       "safer_wording": "Liability is limited to the amount paid, except for loss caused by negligence, wilful misconduct, fraud or failure to deliver.",
       "exclude_patterns": [
-        "\\byou (will|shall|are|may) be (held )?(liable|responsible)\\b"
+        "\\byou (will|shall|are|may) be (held )?(liable|responsible)\\b",
+        "\\bnothing in\\b[^.;]{0,40}\\b(exclude|limit)s?\\b"
       ]
     },
     {
@@ -379,7 +393,12 @@
       "patterns": [
         "\\bauto(matic(ally)?)?[- ]?renew\\w*\\b",
         "\\brenew\\w*\\b[^.;]{0,15}\\bautomatically\\b",
-        "\\bunless (you )?cancel\\w*\\b"
+        "\\bunless (you )?cancel\\w*\\b",
+        "\\bautomatic(ally)?\\b[^.;]{0,40}\\b(renew|extend|extension|continue|roll over)\\w*\\b",
+        "\\b(renewed|extended|continue|continues|roll over)\\b[^.;]{0,40}\\bautomatically\\b",
+        "\\bsuccessive\\b[^.;]{0,40}\\b(terms?|periods?|years?|months?)\\b",
+        "\\bcontinue\\w*\\b[^.;]{0,50}\\b(indefinitely|until terminated|from year to year|month to month)\\b",
+        "\\b(renew|extend)\\w*\\b[^.;]{0,80}\\b(additional|further|successive|renewal|extension) (term|period)s?\\b"
       ],
       "protections": [
         "renewal_reminder",
@@ -519,9 +538,15 @@
       ],
       "weight": 0.45,
       "patterns": [
-        "\\bby (using|accessing|installing|downloading|registering|visiting|browsing|clicking|continuing to use|signing up|creating an account|purchasing|making a payment)\\b[^.;]{0,100}\\b(you )?(agree|accept|consent|acknowledge|indicate|confirm)\\w*\\b",
+        "\\bby (using|accessing|installing|downloading|registering|visiting|browsing|clicking|continuing to use|signing up|creating an account|purchasing|making a payment)\\b[^.;]{0,200}\\b(you )?(agree|accept|consent|acknowledge|indicate|confirm)\\w*\\b",
         "\\b(continued|continuing|further) (use|access)\\b[^.;]{0,80}\\b(constitutes?|means?|deemed|signif\\w*|indicates?|shall be)\\b[^.;]{0,40}\\b(accept|agree|consent)\\w*\\b",
-        "\\b(through|by) your use of\\b[^.;]{0,60}\\byou (consent|agree|accept)\\b"
+        "\\b(through|by) your use of\\b[^.;]{0,60}\\byou (consent|agree|accept)\\b",
+        "\\b(continued|continuing|further) (use|access)\\b[^.;]{0,150}\\b(constitutes?|deemed|means?|accept\\w*|agree\\w*)\\b",
+        "\\b(use of|access to|access and use of|using)\\b[^.;]{0,80}\\b(constitutes?|signif\\w*|deemed)\\b[^.;]{0,40}\\b(accept|agree)\\w*",
+        "\\bwhenever you use\\b[^.;]{0,60}\\bagree",
+        "\\byou agree to\\b[^.;]{0,80}\\bby (installing|accessing|using|registering|downloading)",
+        "\\bdeemed to have accepted\\b",
+        "\\bkeep using\\b[^.;]{0,80}\\bagree"
       ],
       "protections": [],
       "reason": "Just using the service counts as agreeing, even if you never read or signed the terms, and that includes later changes.",
@@ -538,7 +563,9 @@
       "weight": 0.6,
       "patterns": [
         "\\b(we|company|reserves? the right|has the right|right to|at (its|our) (sole )?(discretion|judgment)|(?<!you )may)\\b[^.;]{0,50}\\b(remove|delete|disable|block|reclaim|take down|refuse to (post|display|publish)|edit|withdraw|screen)\\w*\\b[^.;]{0,60}\\b(content|account|username|posts?|photos?|virtual|materials?|data|communications?|listings?|items?|messages?)\\b",
-        "\\b(content|posts?|materials?|virtual (goods|items|money|currency))\\b[^.;]{0,40}\\b(may|will|can) be (removed|deleted|disabled|lost|forfeited|reclaimed)\\b"
+        "\\b(content|posts?|materials?|virtual (goods|items|money|currency))\\b[^.;]{0,40}\\b(may|will|can) be (removed|deleted|disabled|lost|forfeited|reclaimed)\\b",
+        "^(?=.*\\b(?:may|reserves?|right|discretion)\\b).*\\b(remove|reclaim|reject|refuse|disallow|reassign|eliminate|adjust)\\w*\\b[^.;]{0,60}\\b(submissions?|reviews?|usernames?|virtual|content|materials?|postings?|permalinks?|items?)\\b",
+        "\\bunder no obligation to (store|retain|publish|keep|back ?up)\\b"
       ],
       "exclude_patterns": [
         "\\byou (may|can) (remove|delete|edit)"
@@ -570,6 +597,89 @@
       "reason": "The contract follows another country's or state's law, which may give you fewer protections than your local consumer law.",
       "question": "Do my local consumer protection laws still apply to me?",
       "safer_wording": "This agreement is governed by the laws of India, and nothing in it removes the consumer's statutory rights where they live."
+    },
+    {
+      "id": "no_challenge",
+      "name": "You can't challenge their rights",
+      "doc_types": [
+        "all"
+      ],
+      "weight": 0.45,
+      "patterns": [
+        "\\b(not|never|no)\\b[^.;]{0,100}\\b(contest|challenge|dispute|oppose|attack|impair)\\w*\\b[^.;]{0,80}\\b(validity|ownership|rights?|title|marks?|trademarks?|patents?|intellectual property|interest)\\b",
+        "\\b(not|never) (to )?(sue|bring (any )?(action|suit|claim|proceeding))\\b",
+        "\\bcovenants? not to sue\\b",
+        "\\b(shall|will) not\\b[^.;]{0,30}\\b(acquire|claim|register)\\b[^.;]{0,40}\\b(title|rights?|ownership|trademarks?|marks?)\\b"
+      ],
+      "protections": [
+        "consumer_rights"
+      ],
+      "reason": "You promise never to dispute their ownership or rights, even if you later find a real problem.",
+      "question": "Can I still challenge their rights if they turn out to be invalid or if they breach the agreement?",
+      "safer_wording": "Nothing in this agreement prevents either party from challenging the validity of the other's rights in good faith."
+    },
+    {
+      "id": "termination_for_convenience",
+      "name": "They can end it early for any reason",
+      "doc_types": [
+        "all"
+      ],
+      "weight": 0.45,
+      "patterns": [
+        "\\bterminat\\w*\\b[^.;]{0,80}\\b(for any reason|for convenience|without cause|for no reason|with or without cause|in (its|their) (sole )?discretion)\\b",
+        "\\b(may|can|right to)\\b[^.;]{0,40}\\b(terminate|end|cancel|withdraw|discontinue)\\b[^.;]{0,100}\\b(at any time|upon|on|by giving|with)\\b[^.;]{0,40}\\b(days|months|weeks)'?’? (prior |advance )?(written )?notice\\b",
+        "\\bterminat\\w*\\b[^.;]{0,30}\\b(immediately|automatically)\\b[^.;]{0,40}\\b(upon|on) (receipt|delivery|notice)\\b"
+      ],
+      "exclude_patterns": [
+        "\\byou (may|can) (terminate|cancel|end)"
+      ],
+      "protections": [
+        "written_notice"
+      ],
+      "reason": "The other side can end the deal early even if you did nothing wrong, and you may lose the work or income you planned on.",
+      "question": "How much notice and compensation do I get if they end it early without any fault on my side?",
+      "safer_wording": "Either party may terminate for convenience with at least 30 days' written notice, and fees for work already done or committed will be paid in full."
+    },
+    {
+      "id": "ip_assignment",
+      "name": "You hand over ownership of your work",
+      "doc_types": [
+        "all"
+      ],
+      "weight": 0.45,
+      "patterns": [
+        "\\b(assigns?|transfers?|conveys?|assigned|transferred)\\b[^.;]{0,80}\\b(all )?(rights?,? title,? and interest|right,? title and interest|intellectual property|ownership|copyrights?|patents?|inventions?|domain names?)\\b",
+        "\\b(shall|will) (be|become|remain|vest in)\\b[^.;]{0,20}\\b(the )?(sole and )?(exclusive )?property of\\b",
+        "\\bworks? made for hire\\b",
+        "\\b(vest|vests|vested) (solely )?in\\b[^.;]{0,40}\\b(company|client|employer|licensor|licensee)\\b"
+      ],
+      "protections": [],
+      "reason": "You give away ownership of what you create, so you may not be able to reuse or show it later.",
+      "question": "Which exact work do I hand over, when (only after full payment?), and can I keep it for my portfolio?",
+      "safer_wording": "Ownership of the final deliverables transfers to the Client after full payment. The creator keeps pre-existing tools and may show the work in a portfolio.",
+      "exclude_patterns": [
+        "\\b(does not|do not|will not|shall not) (convey|transfer|assign)\\b",
+        "\\byou retain\\b[^.;]{0,20}\\bownership\\b"
+      ]
+    },
+    {
+      "id": "exit_fee",
+      "name": "Fee or penalty for ending early",
+      "doc_types": [
+        "all"
+      ],
+      "weight": 0.6,
+      "patterns": [
+        "\\b(termination|cancellation|early termination|exit|break|pre-?closure) (fee|payment|charge|penalty|amount)\\b",
+        "\\bliquidated damages\\b",
+        "\\b(pay|payable)\\b[^.;]{0,60}\\b(remaining|unpaid|balance of)\\b[^.;]{0,60}\\b(term|contract|minimum|fees)\\b"
+      ],
+      "protections": [
+        "pro_rata"
+      ],
+      "reason": "Leaving or cancelling early costs you a fixed fee, which may be more than the loss you actually cause.",
+      "question": "How is the early-exit fee calculated, and is it capped or reduced over time?",
+      "safer_wording": "On early termination, the leaving party pays only documented costs actually incurred, capped at one month's fees."
     }
   ],
   "protections": [
