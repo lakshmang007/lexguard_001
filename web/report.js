@@ -120,10 +120,10 @@ const LexReport = (() => {
       <div class="topq steps">
         <h3>How LEXGUARD checked this</h3>
         <ol class="agents">
-          <li><b>Extractor</b> split the text into ${plural(r.clause_count, "sentence")} and clauses, keeping the exact words.</li>
-          <li><b>Risk Finder</b> compared each one with the ${r.rules_checked} kinds of risky wording that apply to this kind of document, and flagged ${plural(r.flags.length, "sentence")} (${plural(kinds, "kind")} of risk).</li>
-          <li><b>Defender</b> searched the whole document for protections, like a refund window or written notice, and lowered the risk of ${plural(o.defended, "sentence")}.</li>
-          <li><b>Judge</b> gave each sentence LOW, MEDIUM or HIGH, and added up the points per kind: <b>${o.score}/100</b>.</li>
+          <li><span><b>Extractor</b> split the text into ${plural(r.clause_count, "sentence")} and clauses, keeping the exact words.</span></li>
+          <li><span><b>Risk Finder</b> compared each one with the ${r.rules_checked} kinds of risky wording that apply to this kind of document, and flagged ${plural(r.flags.length, "sentence")} (${plural(kinds, "kind")} of risk).</span></li>
+          <li><span><b>Defender</b> searched the whole document for protections, like a refund window or written notice, and lowered the risk of ${plural(o.defended, "sentence")}.</span></li>
+          <li><span><b>Judge</b> gave each sentence LOW, MEDIUM or HIGH, and added up the points per kind: <b>${o.score}/100</b>.</span></li>
         </ol>
         <p class="hint">Everything ran inside your browser using fixed rules. No AI service was used and nothing was uploaded.</p>
       </div>`;

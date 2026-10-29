@@ -77,7 +77,7 @@ label.toggle { color: var(--muted); font-size: 14px; display: flex; gap: 6px; al
 .error { color: var(--high); background: var(--high-bg); padding: 10px 14px; border-radius: 12px; margin-top: 12px; }
 
 /* Summary: score ring + verdict */
-.summary { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; background: var(--panel); border-radius: var(--radius); padding: 20px; margin-top: 20px; box-shadow: var(--shadow-1); }
+.summary { display: flex; gap: 22px; align-items: flex-start; flex-wrap: wrap; background: var(--panel); border-radius: var(--radius); padding: 20px; margin-top: 20px; box-shadow: var(--shadow-1); }
 .score { --p: 0; --ring: var(--low-ring); width: 112px; height: 112px; flex: none; border-radius: 50%; display: grid; place-items: center; align-content: center;
   background: radial-gradient(closest-side, var(--panel) 80%, transparent 81% 100%), conic-gradient(var(--ring) calc(var(--p) * 1%), var(--line) 0); }
 .score.high { --ring: var(--high-ring); color: var(--high); } .score.med { --ring: var(--med-ring); color: var(--med); } .score.low { --ring: var(--ok-ring); color: var(--ok); }
