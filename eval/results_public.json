@@ -6,11 +6,11 @@
     "unfair_sentences": 172,
     "fair_sentences": 1435,
     "binary": {
-      "precision": 0.542,
+      "precision": 0.564,
       "recall": 0.744,
-      "f1": 0.627,
-      "fair_flagged_any": 0.075,
-      "fair_flagged_high": 0.036
+      "f1": 0.642,
+      "fair_flagged_any": 0.069,
+      "fair_flagged_high": 0.03
     },
     "per_label": {
       "Arbitration": {
@@ -64,16 +64,16 @@
     },
     "top_false_positive_rules": [
       [
-        "unilateral_change",
-        22
-      ],
-      [
         "limitation_of_liability",
         20
       ],
       [
+        "unilateral_change",
+        15
+      ],
+      [
         "termination_without_notice",
-        12
+        10
       ],
       [
         "waiver_of_claims",
@@ -81,7 +81,7 @@
       ],
       [
         "auto_renewal",
-        9
+        8
       ],
       [
         "content_removal",
@@ -144,22 +144,22 @@
         "any dispute , conflict , claim or controversy arising out of or broadly in connection with or relating to the services or these terms , including those relating to its validity , its construction or i"
       ]
     },
-    "seconds": 1.09,
-    "ms_per_sentence": 0.68
+    "seconds": 1.17,
+    "ms_per_sentence": 0.72
   },
   "cuad": {
     "dataset": "CUAD v1 (master_clauses.csv)",
     "part": "holdout",
     "contracts": 255,
     "clauses_tested": 941,
-    "recall_right_rule": 0.597,
+    "recall_right_rule": 0.593,
     "per_category": {
       "Renewal Term": {
         "clauses": 101,
-        "any_flag": 72,
-        "right_rule": 70,
-        "recall_right_rule": 0.693,
-        "recall_any_flag": 0.713
+        "any_flag": 70,
+        "right_rule": 67,
+        "recall_right_rule": 0.663,
+        "recall_any_flag": 0.693
       },
       "Non-Compete": {
         "clauses": 124,
@@ -191,10 +191,10 @@
       },
       "Termination For Convenience": {
         "clauses": 105,
-        "any_flag": 54,
-        "right_rule": 48,
-        "recall_right_rule": 0.457,
-        "recall_any_flag": 0.514
+        "any_flag": 53,
+        "right_rule": 47,
+        "recall_right_rule": 0.448,
+        "recall_any_flag": 0.505
       },
       "Ip Ownership Assignment": {
         "clauses": 143,

@@ -8,6 +8,7 @@ from . import ai_layer
 from .defender import defend
 from .doc_type import LABELS, detect
 from .extractor import extract
+from .impact import check_impact
 from .judge import judge
 from .risk_finder import applies, compile_rules, find_risks
 
@@ -42,6 +43,7 @@ def analyze(text, doc_type=None, use_ai=False):
     clauses = extract(text)
     find_risks(clauses, rules, detected["type"])
     defend(clauses, rules)
+    check_impact(clauses)
     flags, overall = judge(clauses, rules)
 
     ai_info = {"used": False, "note": "AI layer switched off; results come from the offline rule library only."}

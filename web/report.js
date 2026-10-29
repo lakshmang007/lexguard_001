@@ -122,11 +122,26 @@ const LexReport = (() => {
         <ol class="agents">
           <li><span><b>Extractor</b> split the text into ${plural(r.clause_count, "sentence")} and clauses, keeping the exact words.</span></li>
           <li><span><b>Risk Finder</b> compared each one with the ${r.rules_checked} kinds of risky wording that apply to this kind of document, and flagged ${plural(r.flags.length, "sentence")} (${plural(kinds, "kind")} of risk).</span></li>
-          <li><span><b>Defender</b> searched the whole document for protections, like a refund window or written notice, and lowered the risk of ${plural(o.defended, "sentence")}.</span></li>
+          <li><span><b>Defender</b> searched the whole document for protections, like a refund window or written notice, and lowered the risk of ${plural(o.defended, "sentence")}. It also checked <b>who each sentence affects</b>: it removed ${plural(o.skipped || 0, "sentence")} that only give you a right or are a promise to you${o.both_sides ? `, and lowered ${plural(o.both_sides, "rule")} that bind both sides` : ""}.</span></li>
           <li><span><b>Judge</b> gave each sentence LOW, MEDIUM or HIGH, and added up the points per kind: <b>${o.score}/100</b>.</span></li>
         </ol>
+        ${skippedList(o)}
         <p class="hint">Everything ran inside your browser using fixed rules. No AI service was used and nothing was uploaded.</p>
       </div>`;
+  }
+
+  // Sentences with risky-looking words that the Defender found are not a risk for the reader.
+  function skippedList(o) {
+    const items = (o.skipped_examples || []).map((s) =>
+      `<li><q>${esc(s.text.length > 180 ? `${s.text.slice(0, 180)}…` : s.text)}</q> <span class="hint">(${esc(s.label)})</span><br><span class="why-not">${esc(s.reason)}</span></li>`).join("");
+    if (!items) return "";
+    return `
+        <details class="not-risks">
+          <summary>Not a risk for you (${o.skipped})</summary>
+          <p class="hint">These sentences use risky-sounding words, but they protect you or describe your own choices, so they are not counted.</p>
+          <ul>${items}</ul>
+          ${o.skipped > 5 ? `<p class="hint">Showing 5 of ${o.skipped}.</p>` : ""}
+        </details>`;
   }
 
   function verdict(r) {

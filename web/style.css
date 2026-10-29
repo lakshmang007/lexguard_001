@@ -195,3 +195,10 @@ footer { color: var(--muted); font-size: 13px; text-align: center; padding: 24px
   .card, .summary, .topq, .doc { box-shadow: none; border: 1px solid #dadce0; break-inside: avoid; }
   .reveal { opacity: 1 !important; transform: none !important; }
 }
+
+/* "Not a risk for you": sentences the Defender removed because they protect the reader. */
+.not-risks { margin-top: 12px; font-size: 14px; }
+.not-risks summary { cursor: pointer; color: var(--ok); font-weight: 500; width: fit-content; }
+.not-risks ul { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 8px; }
+.not-risks q { font-family: Georgia, serif; }
+.not-risks .why-not { color: var(--ok); font-size: 13px; }

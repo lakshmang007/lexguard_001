@@ -48,9 +48,14 @@ def judge(clauses, rules):
             "safer_wording": rule["safer_wording"],
             "jurisdiction": top.get("jurisdiction"),
             "also": [{"rule": h["rule"], "name": h["name"]} for h in hits[1:]],
+            "impact": top["impact"],
             "source": "rules",
         })
 
+    # Sentences the Defender found are not a risk for the reader (a right or a promise to them).
+    skipped = [{"id": c["id"], "label": label(c).capitalize(), "text": c["text"], "name": c["skipped"][0]["name"],
+                "reason": c["skipped"][0]["reason"]}
+               for c in clauses if c.get("skipped") and not c.get("risks")]
     counts = {lvl: sum(1 for f in flags if f["level"] == lvl) for lvl in LEVEL_POINTS}
 
     kinds = {}
@@ -87,4 +92,7 @@ def judge(clauses, rules):
         "kind_counts": {lvl: sum(1 for k in breakdown if k["level"] == lvl) for lvl in LEVEL_POINTS},
         "level_points": LEVEL_POINTS,
         "defended": sum(1 for f in flags if f["defended"]),
+        "both_sides": sum(1 for f in flags if f["impact"] == "both"),
+        "skipped": len(skipped),
+        "skipped_examples": skipped[:5],
     }

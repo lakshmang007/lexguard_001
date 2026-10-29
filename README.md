@@ -15,7 +15,8 @@ Web page  / Chrome extension / PDF upload
                  │
   1. Extractor   → numbered clauses with exact character positions
   2. Risk Finder → 32 risk rules (incl. India rule pack) from engine/rules/rules.json
-  3. Defender    → searches the whole document for protections, lowers the risk
+  3. Defender    → searches the whole document for protections, lowers the risk,
+                   and checks who each sentence affects (drops your rights and promises to you)
   4. Judge       → LOW / MEDIUM / HIGH, overall score, top-3 questions
                  │
   Highlighted report · clarification email · save as PDF
@@ -48,6 +49,20 @@ The score is out of 100, and each step is shown in the report under **How was th
 4. **50 or more = HIGH risk, 20–49 = MEDIUM, under 20 = LOW.**
 
 An earlier version added up every flagged sentence, so long terms (Flipkart, Razorpay, Zomato) always scored 99–100. With the per-kind score, the same real pages get: GitHub 84, Flipkart 68, Zomato 65, Razorpay 59, Netflix 56, Spotify 45.
+
+## Who does it affect?
+
+A risky-sounding word is only a risk if **you** carry the cost. The Defender checks who acts in each flagged sentence (`engine/impact.py`, mirrored in `extension/engine.js`):
+
+| Sentence | Result |
+|---|---|
+| "You can opt out…", "you can reject the change by unsubscribing", "You may opt for…" | Your right: **removed** |
+| "We do not disclose your personal information…", "We will not delete Content…" | A promise to you: **removed** |
+| "You will not be liable for…" | Protects you: **removed** |
+| "Either party may terminate…" | Applies to both sides: **lowered** |
+| "We may change…", "You may be charged…", "Flipkart shall not be liable…" | A risk for you: **kept** |
+
+Removed sentences are listed in the report under **Not a risk for you**, so nothing is hidden. On the six real sites, 11 sentences were removed, each checked by hand. On UNFAIR-ToS, precision rose from 54.2% to 56.4% and false HIGH flags fell from 3.6% to 3.0%, while recall stayed at 74.4%.
 
 ## What the report shows
 
@@ -92,11 +107,11 @@ These samples were written by the same team that wrote the rules, so they are a 
 
 ### Results on public data: LexGLUE UNFAIR-ToS, held-out test split (1,607 sentences)
 
-| Metric | First rules | Round 1 tuning | Round 2 tuning (current) |
+| Metric | First rules | Round 1 tuning | Now (round 2 + "who it affects" check) |
 |---|---|---|---|
 | Unfair sentences flagged (recall) | 28.5% | 65.7% | **74.4%** |
-| Precision | 45.8% | 54.1% | **54.2%** |
-| Fair sentences flagged HIGH | 2.4% | 3.5% | **3.6%** |
+| Precision | 45.8% | 54.1% | **56.4%** |
+| Fair sentences flagged HIGH | 2.4% | 3.5% | **3.0%** |
 | Speed | | | 0.7 ms per sentence |
 
 Recall by type in round 2: Arbitration 86%, Choice of law 85%, Content removal 85%, Limitation of liability 82%, Contract by using 70%, Jurisdiction 69%, Unilateral termination 66%, Unilateral change 60%. Rules were tuned only on the train split and checked on validation.

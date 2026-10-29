@@ -11,6 +11,8 @@ const out = cases.map(({ text, doc_type }) => {
   return {
     doc_type: r.doc_type.type,
     score: r.overall.score,
+    skipped: r.overall.skipped,
+    impact: r.flags.map((f) => f.impact),
     breakdown: r.overall.breakdown.map((k) => [k.rule, k.level, k.points, k.sentences, k.defended]),
     flags: r.flags.map((f) => [f.start, f.end, f.rule, f.level, f.weight, f.defender, f.also.map((a) => a.rule)]),
   };

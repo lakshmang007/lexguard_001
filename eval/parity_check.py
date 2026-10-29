@@ -19,6 +19,8 @@ from engine import analyze  # noqa: E402
 def cases():
     for f in sorted((ROOT / "samples").glob("*.txt")):
         yield {"text": f.read_text(encoding="utf-8"), "doc_type": None, "name": f.name}
+    for f in sorted((ROOT / "web" / "_tmp").glob("*.txt")):  # real terms pages, when downloaded locally
+        yield {"text": f.read_text(encoding="utf-8"), "doc_type": None, "name": f.name}
     yield {"text": (ROOT / "web" / "demo_signup.html").read_text(encoding="utf-8"), "doc_type": None, "name": "demo_signup.html"}
     for line in (ROOT / "datasets" / "lexglue_unfair_tos" / "test.jsonl").open(encoding="utf-8"):
         yield {"text": json.loads(line)["text"], "doc_type": "any", "name": "unfair_tos"}
@@ -34,6 +36,8 @@ def py_result(c):
     return {
         "doc_type": r["doc_type"]["type"],
         "score": r["overall"]["score"],
+        "skipped": r["overall"]["skipped"],
+        "impact": [f["impact"] for f in r["flags"]],
         "breakdown": [[k["rule"], k["level"], k["points"], k["sentences"], k["defended"]] for k in r["overall"]["breakdown"]],
         "flags": [[f["start"], f["end"], f["rule"], f["level"], f["weight"], f["defender"], [a["rule"] for a in f["also"]]] for f in r["flags"]],
     }

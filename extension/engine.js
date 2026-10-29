@@ -182,6 +182,80 @@ const LexEngine = (() => {
     }
   }
 
+  // ---- Agent 3, part 2: who does this sentence affect? -------------------------------------
+  // Mirrors engine/impact.py: drops rights and promises that protect the reader, lowers rules
+  // that bind both sides, keeps everything that lands on the reader.
+  const USER_P = "you|yourself|the user|the employee|the client|the merchant|the subscriber|the attendee|the buyer|the member|the candidate";
+  const COMPANY_P = "we|us|the company|the provider|the service provider|the platform|the organi[sz]er|the employer|the vendor|the licensor";
+  const MUTUAL_P = "either party|each party|both parties|the parties|either of the parties|mutually";
+  const PARTY = new RegExp(String.raw`\b(?:(?<mutual>${MUTUAL_P})|(?<user>${USER_P})|(?<company>${COMPANY_P}))\b`, "gi");
+  const USER_RIGHT = /[\s,]*(?:\w+[\s,]+){0,2}?(?:may|can|could|are (?:free|entitled|allowed) to|have the right to|shall have the right to|choose to|opt)\b(?![\s,]+(?:also[\s,]+|still[\s,]+)?be\b)/iy;
+  const PROMISE = new RegExp(String.raw`\b(?:${COMPANY_P})\b[^.;]{0,30}?\b(?:(?:will|shall|do|does|would|can|may)(?:\s+not|n['’]t)|never|no longer)\b[^.;]{0,40}?\b(?:sell|rent|share|disclose|delete|remove|screen|monitor|charge|increase|change|modify|renew|transfer|terminate|suspend|use)\w*\b`, "gi");
+  const EXCEPTION = /\b(?:except|unless|other than|however|but)\b/i;
+  const YOU_NOT_LIABLE = /\byou\s+(?:will|shall|would|are)\s+not\s+be\s+(?:held\s+)?(?:liable|responsible)\b/gi;
+  const POWER_RULES = new Set(["unilateral_change", "termination_without_notice", "termination_for_convenience", "content_removal",
+    "provider_cancellation", "data_sharing", "price_escalation", "hidden_fees", "auto_renewal", "pay_change", "transfer_anywhere"]);
+  const PROMISE_RULES = new Set(["data_sharing", "content_removal", "hidden_fees", "auto_renewal", "unilateral_change",
+    "price_escalation", "termination_without_notice", "termination_for_convenience"]);
+  const LIABILITY_RULES = new Set(["limitation_of_liability", "delay_no_liability"]);
+  const MUTUAL_RULES = new Set([...POWER_RULES, "limitation_of_liability", "exit_fee"]);
+  const MUTUAL_REDUCES = 0.2;
+
+  function actorBefore(text, pos) {
+    let last = null;
+    for (const m of text.slice(0, pos).matchAll(PARTY)) last = m;
+    if (!last) return [null, null];
+    const kind = Object.keys(last.groups).find((g) => last.groups[g] !== undefined);
+    return [kind, last];
+  }
+
+  function assess(text, ruleId, matchStart) {
+    if (PROMISE_RULES.has(ruleId)) {
+      for (const p of text.matchAll(PROMISE)) {
+        const end = p.index + p[0].length;
+        if (p.index <= matchStart && matchStart <= end + 80 && !EXCEPTION.test(text.slice(p.index, Math.max(end, matchStart)))) {
+          return ["not_you", "A promise the company makes to you, not a risk for you."];
+        }
+      }
+    }
+    const [kind, actor] = actorBefore(text, matchStart + 1);
+    const actorEnd = actor ? actor.index + actor[0].length : 0;
+    if (kind === "user" && POWER_RULES.has(ruleId)) {
+      USER_RIGHT.lastIndex = actorEnd;
+      if (USER_RIGHT.test(text)) return ["not_you", "This is something you can choose to do, not something done to you."];
+    }
+    if (LIABILITY_RULES.has(ruleId)) {
+      for (const m of text.matchAll(YOU_NOT_LIABLE)) {
+        if (m.index <= matchStart && matchStart <= m.index + m[0].length) return ["not_you", "This limits your liability, which protects you."];
+      }
+    }
+    // "Either party may ..." only counts when both parties are the ones acting, not "the parties agree that X may ...".
+    const between = actor ? text.slice(actorEnd, matchStart) : "";
+    if (kind === "mutual" && MUTUAL_RULES.has(ruleId) && between.length <= 25 && !/\b(?:that|which|whereby)\b/i.test(between)) {
+      return ["both", "Applies to both sides, so it is fairer."];
+    }
+    return ["you", ""];
+  }
+
+  function checkImpact(clauses) {
+    for (const clause of clauses) {
+      const kept = [], skipped = [];
+      for (const hit of clause.risks) {
+        const start = clause.text.indexOf(hit.matched);
+        const [impact, note] = assess(clause.text, hit.rule, Math.max(start, 0));
+        hit.impact = impact;
+        if (impact === "not_you") { skipped.push({ rule: hit.rule, name: hit.name, reason: note }); continue; }
+        if (impact === "both") {
+          hit.final_weight = round(Math.max(0.05, hit.final_weight - MUTUAL_REDUCES));
+          hit.defender_note += " " + note;
+        }
+        kept.push(hit);
+      }
+      clause.risks = kept;
+      clause.skipped = skipped;
+    }
+  }
+
   // ---- Agent 4: Judge --------------------------------------------------------------------
   const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   const LEVEL_POINTS = { HIGH: 15, MEDIUM: 5, LOW: 1 };
@@ -209,9 +283,14 @@ const LexEngine = (() => {
         reason: rule.reason, defender: top.defender_note, defended: top.defended_by.length > 0,
         question: rule.question, safer_wording: rule.safer_wording, jurisdiction: top.jurisdiction,
         also: hits.slice(1).map((h) => ({ rule: h.rule, name: h.name })),
+        impact: top.impact,
         source: "rules",
       });
     }
+    // Sentences the Defender found are not a risk for the reader (a right or a promise to them).
+    const skipped = clauses.filter((c) => c.skipped && c.skipped.length && !c.risks.length).map((c) => ({
+      id: c.id, label: capitalize(label(c)), text: c.text, name: c.skipped[0].name, reason: c.skipped[0].reason,
+    }));
     const counts = { HIGH: 0, MEDIUM: 0, LOW: 0 };
     flags.forEach((f) => counts[f.level]++);
 
@@ -245,6 +324,9 @@ const LexEngine = (() => {
       score, level: overall, counts, top_questions: topQuestions,
       breakdown, points, kind_counts: kindCounts, level_points: LEVEL_POINTS,
       defended: flags.filter((f) => f.defended).length,
+      both_sides: flags.filter((f) => f.impact === "both").length,
+      skipped: skipped.length,
+      skipped_examples: skipped.slice(0, 5),
     }];
   }
 
@@ -274,6 +356,7 @@ const LexEngine = (() => {
     const clauses = extract(text);
     findRisks(clauses, rules, detected.type);
     defend(clauses, rules);
+    checkImpact(clauses);
     const [flags, overall] = judge(clauses, rules);
     const t1 = typeof performance !== "undefined" ? performance.now() : Date.now();
     return {
