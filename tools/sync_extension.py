@@ -17,6 +17,7 @@ COPIES = {
     ROOT / "engine" / "rules" / "rules.json": EXT / "rules.json",
     ROOT / "web" / "report.js": EXT / "report.js",
     ROOT / "web" / "style.css": EXT / "style.css",
+    ROOT / "web" / "motion.js": EXT / "motion.js",
 }
 
 
@@ -46,7 +47,7 @@ def png(path, size, pixel):
 
 
 def icon(x, y):
-    purple, white, red = (83, 74, 183, 255), (255, 255, 255, 255), (226, 75, 74, 255)
+    blue, white, red = (66, 133, 244, 255), (255, 255, 255, 255), (234, 67, 53, 255)  # Google blue / red
     # Rounded square background.
     r = 0.2
     cx, cy = min(max(x, r), 1 - r), min(max(y, r), 1 - r)
@@ -60,7 +61,7 @@ def icon(x, y):
             if 0.4 <= y <= 0.5 and abs(x - 0.5) <= half - 0.07:
                 return red
             return white
-    return purple
+    return blue
 
 
 def main():

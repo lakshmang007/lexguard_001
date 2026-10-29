@@ -39,7 +39,7 @@ const LexReport = (() => {
     const qs = o.top_questions.map((q) => `<li>${esc(q.question)} <a href="#" data-goto="${q.clause_id}">(${esc(q.label)})</a></li>`).join("");
     return `
       <div class="summary">
-        <div class="score ${LEVEL_CLASS[o.level]}"><span class="num">${o.score}</span><span class="of">/100</span><span class="lvl">${o.level} risk</span></div>
+        <div class="score ${LEVEL_CLASS[o.level]}" style="--p:${o.score}" data-score="${o.score}" role="img" aria-label="Risk score ${o.score} out of 100, ${o.level.toLowerCase()} risk"><span class="num">${o.score}</span><span class="of">/100</span><span class="lvl">${o.level} risk</span></div>
         <div class="meta">
           <div class="verdict">${esc(verdict(r))}</div>
           <div class="ai-note">${esc(r.doc_type.label)} · ${r.clause_count} clauses checked · ${r.elapsed_ms} ms · offline rules only</div>
