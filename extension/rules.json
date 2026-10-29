@@ -212,7 +212,11 @@
       "protections": [],
       "reason": "The other side may claim ownership of your personal projects too.",
       "question": "Can ownership be limited to work done for this job, using company time or resources?",
-      "safer_wording": "The Company owns work created in the course of employment or using Company resources. Personal projects made outside working hours remain the Employee's."
+      "safer_wording": "The Company owns work created in the course of employment or using Company resources. Personal projects made outside working hours remain the Employee's.",
+      "exclude_patterns": [
+        "\\bremains?\\s+(?:yours|with you|the (?:employee|consultant|creator)['’]?s?)\\b",
+        "\\bbelongs?\\s+to you\\b"
+      ]
     },
     {
       "id": "waiver_of_claims",

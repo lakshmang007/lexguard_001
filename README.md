@@ -39,6 +39,10 @@ The extension is self-contained. The four agents run inside the browser (`extens
 
 Permissions: `activeTab` reads only the tab you open LEXGUARD on. If you check a different tab later, Chrome asks once for that site. No page text leaves the browser.
 
+## Demo kit
+
+`demo/` has everything for a live demo: four synthetic documents as `.txt` and `.pdf` (a risky offer letter scoring 81, a fair one scoring 2, a freelance quote scoring 62, and concert ticket terms scoring 57), a fake signup page for the extension (76), and **`demo/HOW_TO_DEMO.txt`**, a step-by-step 4-minute demo script with setup, what to click, what to say, and fixes if something goes wrong. Rebuild it with `python tools/make_demo_kit.py`.
+
 ## How the risk score works
 
 The score is out of 100, and each step is shown in the report under **How was this score worked out?**
