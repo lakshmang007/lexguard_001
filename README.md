@@ -26,7 +26,19 @@ Web page  / Chrome extension / PDF upload
 - **The Defender reduces false alarms:** it only counts a protection that is in the same clause or in a clause on the same topic.
 - **Optional AI layer:** a disclosed hook in `engine/ai_layer.py`. It is off and not implemented in this prototype.
 
-## Run it
+## Use it: Chrome extension (no server, no install of Python)
+
+The extension is self-contained. The four agents run inside the browser (`extension/engine.js`), using the same `rules.json` as the Python engine.
+
+1. Download this repository (Code → Download ZIP) and unzip it.
+2. Open `chrome://extensions`, turn on **Developer mode**, click **Load unpacked** and choose the `extension/` folder. It also works in Edge and Brave.
+3. On any terms, signup or offer page, click the LEXGUARD icon, then **Check this page**. You can also select text and right-click **Check selected text with LEXGUARD**.
+4. Risky sentences are highlighted on the page. The side panel shows the verdict, an "In short" list and short cards with details folded away. Click a card to jump to its sentence, or click a highlight to jump to its card.
+5. **Paste or upload a document** opens the full checker. Paste text or upload a `.txt` or `.pdf` (read offline with Mozilla pdf.js), and try the three samples.
+
+Permissions: `activeTab` reads only the tab you open LEXGUARD on. If you check a different tab later, Chrome asks once for that site. No page text leaves the browser.
+
+## Use it: local web app (Python)
 
 Requires Python 3.9+. `pypdf` is optional and only needed for PDF upload.
 
@@ -34,14 +46,9 @@ Requires Python 3.9+. `pypdf` is optional and only needed for PDF upload.
 python server.py
 ```
 
-Open http://127.0.0.1:8787, then pick a sample or paste or upload a document.
+Open http://127.0.0.1:8787, then pick a sample or paste or upload a document. A demo signup page for trying the extension is at http://127.0.0.1:8787/web/demo_signup.html.
 
-### Chrome extension
-
-1. Start the server (`python server.py`).
-2. Open `chrome://extensions`, turn on **Developer mode**, click **Load unpacked** and choose the `extension/` folder.
-3. Open a terms or signup page, for example http://127.0.0.1:8787/web/demo_signup.html. Click the LEXGUARD icon, then **Check this page**, or select text and right-click **Check with LEXGUARD**.
-4. Risky sentences are highlighted in the page. Click a card to jump to its sentence, or click a highlight to jump to its card.
+After changing `engine/rules/rules.json` or `web/report.js` / `web/style.css`, run `python tools/sync_extension.py` to copy them into the extension. Then run `python -m eval.parity_check` (needs Node.js), which confirms the browser engine still gives exactly the same flags as the Python engine. The last run had 0 differences across 2,891 documents and sentences.
 
 ## Test it
 
@@ -99,17 +106,18 @@ CUAD has only positive examples, so false alarms are measured on the fair senten
 engine/            extractor, risk_finder, defender, judge, doc_type, ai_layer, rules/rules.json
 server.py          local HTTP server (standard library)
 web/               web page, shared report renderer, demo signup page
-extension/         Chrome Manifest V3 extension (side panel + in-page highlights)
+extension/         Chrome extension: engine.js (JS port of the 4 agents), side panel, in-page highlights, checker page, pdf.js
 samples/           synthetic offer letter, quotation, ticket terms + planted-risk labels
 datasets/          UNFAIR-ToS + CUAD (CC BY 4.0, see datasets/README.md)
-eval/              benchmark.py, public_datasets.py, results
+eval/              benchmark.py, public_datasets.py, parity_check.py (JS = Python), results
+tools/             sync_extension.py (copies shared files into extension/, draws icons)
 ```
 
 ## Known limits (prototype)
 
 - No OCR yet: scanned PDFs without a text layer are rejected with a message.
 - English only. Kannada/Hindi output is planned.
-- The extension can't read Chrome's built-in PDF viewer; use the web page upload instead.
+- The extension can't read Chrome's built-in PDF viewer. Use "Paste or upload a document" for PDFs instead.
 - Rule-based recall is about 74% on real Terms of Service and 60% on business contracts, so a clean report does not mean a document is safe.
 
 ## AI disclosure
@@ -119,3 +127,7 @@ Claude (Anthropic) helped plan the solution note and generated this prototype's 
 ## Licence
 
 The code is for the HACKNOVA-26 submission. The datasets keep their own CC BY 4.0 licences; see `datasets/README.md`.
+
+## Third-party code
+
+`extension/vendor/pdf.min.js` and `pdf.worker.min.js` are Mozilla pdf.js 3.11.174 (Apache License 2.0, see `extension/vendor/LICENSE-pdfjs.txt`).
