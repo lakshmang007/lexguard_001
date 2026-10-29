@@ -111,3 +111,5 @@ Privacy?             Runs inside the browser. No server, no upload, no AI servic
 Why not ChatGPT?     Chatbots can invent things and need your document uploaded. LEXGUARD always
                      quotes the exact sentence and checks protections before warning.
 Is it legal advice?  No, it's a review aid that tells you what to ask before signing.
+
+LEXGUARD_Demo_Video.mp4 is a 90-second silent screen recording of these steps with captions, to play while you talk.
