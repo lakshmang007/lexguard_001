@@ -20,31 +20,29 @@ const readPageFn = () => ({
     .map((a) => ({ text: a.textContent.trim().slice(0, 60), href: a.href })),
 });
 
-// activeTab covers the tab the user opened LEXGUARD on. For any other tab, ask once for that site.
-async function readPage(tab) {
-  try {
-    const [{ result: page }] = await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: readPageFn });
-    return page;
-  } catch (err) {
-    const url = tab.url ? new URL(tab.url) : null;
-    if (!url || !/^https?:$/.test(url.protocol)) throw err;
-    const granted = await chrome.permissions.request({ origins: [`${url.origin}/*`] });
-    if (!granted) throw err;
-    const [{ result: page }] = await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: readPageFn });
-    return page;
-  }
+const WEB_PAGES = { origins: ["https://*/*", "http://*/*"] };
+
+// Chrome only shows a permission prompt during the click itself, so this must be the
+// first call in the button handler, before anything is awaited. Once allowed, it
+// resolves straight away without asking again.
+function check(mode) {
+  run(mode, chrome.permissions.request(WEB_PAGES).catch(() => false));
 }
 
-async function run(mode) {
+async function run(mode, allowed = Promise.resolve(true)) {
   showError("");
+  const granted = await allowed;
   const tab = await activeTab();
   if (!tab) return;
   tabId = tab.id;
   let page;
   try {
-    page = await readPage(tab);
+    const [{ result }] = await chrome.scripting.executeScript({ target: { tabId }, func: readPageFn });
+    page = result;
   } catch {
-    return showError("LEXGUARD can't read this tab. Chrome's own pages and its PDF viewer are blocked. For a PDF, use \"Paste or upload a document\" below.");
+    return showError(granted
+      ? "LEXGUARD can't read this tab. Chrome blocks extensions on its own pages (chrome://, the Web Store) and in its PDF viewer. For a PDF, use \"Paste or upload a document\" above."
+      : "LEXGUARD needs your permission to read web pages. Click \"Check this page\" again and choose Allow. The text is checked inside your browser and never uploaded.");
   }
   const text = mode === "selection" ? page.selection : page.text;
   if (!text.trim()) return showError(mode === "selection" ? "Select some text on the page first." : "This page has no readable text.");
@@ -107,8 +105,8 @@ chrome.storage.onChanged.addListener((changes, area) => {
   if (area === "session" && changes.pending && changes.pending.newValue) takePending();
 });
 
-$("page").addEventListener("click", () => run("page"));
-$("sel").addEventListener("click", () => run("selection"));
+$("page").addEventListener("click", () => check("page"));
+$("sel").addEventListener("click", () => check("selection"));
 $("full").addEventListener("click", () => chrome.tabs.create({ url: chrome.runtime.getURL("checker.html") }));
 $("clear").addEventListener("click", () => tabId && chrome.tabs.sendMessage(tabId, { type: "clear" }));
 $("copy").addEventListener("click", async () => {
